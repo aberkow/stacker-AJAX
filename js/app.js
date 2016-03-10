@@ -1,3 +1,12 @@
+/*
+1 - Users can submit a topic they want to find top answerers for on Stack Overflow.
+2 - The app makes an AJAX call to the appropriate endpoint on the StackExchange API (there are a few hints below).
+3 - The DOM is updated with information about top answerers (if any) after the response is returned.
+*/
+
+//Example of tags api request format...
+///2.2/tags/javascript/top-answerers/month?site=stackoverflow
+
 // this function takes the question object returned by the StackOverflow request
 // and returns new result to be appended to DOM
 var showQuestion = function(question) {
@@ -5,7 +14,7 @@ var showQuestion = function(question) {
 	// clone our result template code
 	var result = $('.templates .question').clone();
 	
-	// Set the question properties in result
+    // Set the question properties in result
 	var questionElem = result.find('.question-text a');
 	questionElem.attr('href', question.link);
 	questionElem.text(question.title);
@@ -29,6 +38,20 @@ var showQuestion = function(question) {
 	);
 
 	return result;
+};
+
+var showInspiration = function(topUsers){
+  //clone the result template for top users
+  var result = $('.templates .top-user').clone();
+  
+  //set the name of the users w link to profile
+  var topUsersElem = result.find('.top-user__name a');
+  topUsersElem.text(topUsers.user.display_name);
+  topUsersElem.attr('href', topUsers.user.link);
+  
+  
+  var topUsersScore = result.find('.top-user__score');
+  topUsersScore.text(topUsers.score);
 };
 
 
