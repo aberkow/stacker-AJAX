@@ -49,9 +49,15 @@ var showInspiration = function(topUsers){
   topUsersElem.text(topUsers.user.display_name);
   topUsersElem.attr('href', topUsers.user.link);
   
-  
+  //set the score for that user for the month
   var topUsersScore = result.find('.top-user__score');
   topUsersScore.text(topUsers.score);
+  
+  //set the overall reputation for the top user
+  var topUsersRep = result.find('.top-user__rep');
+  topUsersRep.text(topUsers.user.reputation);
+  
+  return result;
 };
 
 
@@ -103,6 +109,17 @@ var getUnanswered = function(tags) {
 		$('.search-results').append(errorElem);
 	});
 };
+
+//continue working here!!!
+var getTopUsers = function(tags){
+  //params to pass API GET request
+  var request = {
+    tagged: tags,
+    site: 'stackoverflow',
+    period: month,
+    
+  }
+}
 
 
 $(document).ready( function() {
