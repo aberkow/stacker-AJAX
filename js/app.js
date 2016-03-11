@@ -49,6 +49,10 @@ var showInspiration = function(topUsers){
   topUsersElem.text(topUsers.user.display_name);
   topUsersElem.attr('href', topUsers.user.link);
   
+  //display the user's picture
+  var topUsersImg = result.find('.top-user__image img');
+  topUsersImg.attr('src', topUsers.user.profile_image);
+  
   //set the score for that user for the month
   var topUsersScore = result.find('.top-user__score');
   topUsersScore.text(topUsers.score);
@@ -94,7 +98,8 @@ var getUnanswered = function(tags) {
 		type: "GET",
 	})
 	.done(function(result){ //this waits for the ajax to return with a succesful promise object
-		var searchResults = showSearchResults(request.tagged, result.items.length);
+	   debugger;	
+      var searchResults = showSearchResults(request.tagged, result.items.length);
 
 		$('.search-results').html(searchResults);
 		//$.each is a higher order function. It takes an array and a function as an argument.
@@ -108,18 +113,42 @@ var getUnanswered = function(tags) {
 		var errorElem = showError(error);
 		$('.search-results').append(errorElem);
 	});
+  debugger;
 };
 
-//continue working here!!!
 var getTopUsers = function(tags){
   //params to pass API GET request
   var request = {
     tagged: tags,
-    site: 'stackoverflow',
-    period: month,
+    period: 'month'
+    //site: 'stackoverflow' why can't I pass this as a param?  
+  };
+  console.log(request);
+  //debugger;
+  $.ajax({
+    url: "http://api.stackexchange.com/2.2/tags/" + request.tagged + "/top-answerers/" + request.period + "?site=stackoverflow",
+    data: request,
+    dataType: "jsonp",
+    type: "GET",
+//    error: function(message, error){console.log("The error is" + error);}
+  })
+  .done(function(result){
+    debugger;
+    var searchResults = showSearchResults(request.tagged, result.items.length);
     
-  }
-}
+    $('.search-results').html(searchResults);
+    $.each(result.items, function(i, item) {
+      var inspiration = showInspiration(item);
+      $('.results').append(inspiration);
+    });
+    debugger;
+  })
+  .fail(function(jqXHR, error){
+    var errorElem = showError(error);
+    $('.search-results').append(errorElem);
+  });
+  debugger;
+};
 
 
 $(document).ready( function() {
@@ -131,4 +160,10 @@ $(document).ready( function() {
 		var tags = $(this).find("input[name='tags']").val();
 		getUnanswered(tags);
 	});
+  $('.inspiration-getter').submit(function(e){
+    e.preventDefault();
+    $('.results').html('');
+    var tags = $(this).find("input[name='answerers']").val();
+    getTopUsers(tags);
+  });
 });
