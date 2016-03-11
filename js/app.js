@@ -133,7 +133,7 @@ var getTopUsers = function(tags){
 //    error: function(message, error){console.log("The error is" + error);}
   })
   .done(function(result){
-    debugger;
+    //debugger;
     var searchResults = showSearchResults(request.tagged, result.items.length);
     
     $('.search-results').html(searchResults);
@@ -141,13 +141,13 @@ var getTopUsers = function(tags){
       var inspiration = showInspiration(item);
       $('.results').append(inspiration);
     });
-    debugger;
+    //debugger;
   })
   .fail(function(jqXHR, error){
     var errorElem = showError(error);
     $('.search-results').append(errorElem);
   });
-  debugger;
+  //debugger;
 };
 
 
